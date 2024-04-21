@@ -1,0 +1,28 @@
+<h1>All Goals</h1>
+<% @goals.each do |goal| %>
+  <div>
+    <h2><%= goal.name %></h2>
+    <p><%= goal.description %></p>
+    <p>Completion Status: <%= goal.completion_status %> %</p>
+
+    <%= form_with(model: goal, local: true, html: { class: "update-okrs-form", "data-api-endpoint": update_okrs_goal_path(goal) }) do |form| %>
+      <h3>OKRs</h3>
+      <ul>
+        <% goal.okrs.each do |okr| %>
+          <li>
+            <%= form.check_box :okr_completion_statuses, { multiple: true }, okr.id, nil %>
+            <%= okr.description %>
+            <%= form.hidden_field :okr_ids, value: okr.id %> 
+          </li>
+        <% end %>
+      </ul>
+      <div class="actions">
+        <%= form.submit "Update OKRs" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+
+
+<%= javascript_pack_tag 'update_okrs' %>
